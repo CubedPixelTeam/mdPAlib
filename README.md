@@ -1,6 +1,6 @@
 # dPAlib
 Debloated PAlib, the one that I use. Please know that it is debloated, it won't work on modern devkitARM, it isn't more efficient PAlib.
-
+# IT WORKS ON MODERN DEVKITARM WITH SOME TWEAKS.
 Stuff removed:
 Mode7
 PA_Reco
