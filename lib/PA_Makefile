@@ -16,6 +16,7 @@ endif
 ifeq ($(strip $(DEVKITARM)),)
 $(error Please set DEVKITARM in your environment)
 endif
+include $(DEVKITARM)/ds_rules
 
 ifeq ($(strip $(MAKEFILE_VER)),)
 $(error Your makefile is outdated. Please use the one at $(DEVKITPRO)/PAlib/template)
@@ -156,13 +157,18 @@ export VPATH  := $(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 
 # Determine the name of the tools
 
-PREFIX := arm-eabi-
-
-export CC      := $(PREFIX)gcc
-export CXX     := $(PREFIX)g++
-export AR      := $(PREFIX)ar
-export AS      := $(PREFIX)as
-export OBJCOPY := $(PREFIX)objcopy
+#---------------------------------------------------------------------------------
+# use CXX for linking C++ projects, CC for standard C
+#---------------------------------------------------------------------------------
+ifeq ($(strip $(CPPFILES)),)
+#---------------------------------------------------------------------------------
+	export LD	:=	$(CC)
+#---------------------------------------------------------------------------------
+else
+#---------------------------------------------------------------------------------
+	export LD	:=	$(CXX)
+#---------------------------------------------------------------------------------
+endif
 
 # Collect source code files
 CFILES   := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
@@ -278,7 +284,7 @@ ifeq ($(strip $(MSG_IS_ERROR)),)
 	@echo
 	@[ -d $@ ] || mkdir -p $@
 	@[ -d $(OUTPATH) ] || mkdir -p $(OUTPATH)
-	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 endif
 
 #---------------------------------------------------------------------------------
@@ -312,42 +318,6 @@ ifneq ($(strip $(DONT_BUILD_MAXMOD_SOUNDBANK)), YES)
 	@echo
 	@mmutil $^ -d -osoundbank_bin.bin -hsoundbank.h
 endif
-
-#---------------------------------------------------------------------------------
-%.nds: %.bin
-#---------------------------------------------------------------------------------
-	@ndstool -c $@ -9 $(TARGET).bin -7 $(ARM7BIN) -b $(ICON) "$(TEXT1);$(TEXT2);$(TEXT3)" $(FILESYSTEM) > /dev/null
-	@echo
-	@echo Built: $(notdir $@)
-	@echo
-
-#---------------------------------------------------------------------------------
-%.bin: %.elf
-#---------------------------------------------------------------------------------
-	@$(OBJCOPY) -O binary $(TARGET).elf $(TARGET).bin
-
-#---------------------------------------------------------------------------------
-%.elf:
-#---------------------------------------------------------------------------------
-	@echo
-	@echo Linking...
-	@$(LD) $(LDFLAGS) $(OFILES) $(LIBPATHS) $(LIBS) -o $(TARGET).elf
-
-#---------------------------------------------------------------------------------
-# Rules to build source files
-#---------------------------------------------------------------------------------
-
-#---------------------------------------------------------------------------------
-%.o: %.cpp
-#---------------------------------------------------------------------------------
-	@echo $(notdir $<)
-	@$(CXX) -MMD -MP -MF $(DEPSDIR)/$*.d $(CXXFLAGS) -c $< -o $@
-
-#---------------------------------------------------------------------------------
-%.o: %.c
-#---------------------------------------------------------------------------------
-	@echo $(notdir $<)
-	@$(CC) -MMD -MP -MF $(DEPSDIR)/$*.d $(CFLAGS) -c $< -o $@
 
 #---------------------------------------------------------------------------------
 %.o: %.s
