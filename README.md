@@ -1,6 +1,8 @@
 # dPAlib
 Debloated PAlib, the one that I use, works on modern devkitARM.
 # IT WORKS ON MODERN DEVKITARM UNLIKE VANILLA PALIB
+if it does not work then please recompile the library
+
 Stuff removed:
 Mode7
 PA_Reco
