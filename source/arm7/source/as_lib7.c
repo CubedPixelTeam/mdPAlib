@@ -44,6 +44,7 @@ void AS_InitMP3();
 void AS_MP3Stop();
 void AS_SetTimer(int freq);
 void AS_RegenStream();
+void AS_MP3ClearBuffers();
 void AS_RegenStreamCallback(s16 *stream, u32 numsamples);
 void AS_StereoDesinterleave(s16 *input, s16 *outputL, s16 *outputR, u32 samples);
 
