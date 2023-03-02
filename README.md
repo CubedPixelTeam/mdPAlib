@@ -10,7 +10,7 @@ Extract the folder and rename it to PAlib, put it inside the devkitPro folder (i
 Compile the stupid lib, do make clean and then make.<br>
 you got yourself a broken lib.<br>
 
-Stuff removed:
+# Stuff removed:
 Mode7<br>
 PA_Reco<br>
 PA_Graffity<br>
