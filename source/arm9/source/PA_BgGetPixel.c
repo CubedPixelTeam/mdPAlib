@@ -24,7 +24,8 @@ u8 PAEasyBgGetPixelTiled(u8 screen, u8 bg_number, s32 x, s32 y) {
 	u8 vflip = (Map[mappos] >> 11) & 1;
 	x &= 7; y &= 7; // Adjust in tile...
 
-	if (hflip) x = 7 - x;   if (vflip) y = 7 - y;   // Adjust flips...
+	if (hflip) x = 7 - x;   
+	if (vflip) y = 7 - y;   // Adjust flips...
 
 	u8 *Tiles = (u8*)PA_BgInfo[screen][bg_number].Infos.Tiles;
 	return Tiles[tilepix+x+(y<<3)];
@@ -41,7 +42,8 @@ u8 PAEasyBgGetPixelLarge(u8 screen, u8 bg_number, s32 x, s32 y) {
 	u8 vflip = (Map[mappos] >> 11) & 1;
 	x &= 7; y &= 7; // Adjust in tile...
 
-	if (hflip) x = 7 - x;   if (vflip) y = 7 - y;   // Adjust flips...
+	if (hflip) x = 7 - x;   
+	if (vflip) y = 7 - y;   // Adjust flips...
 
 	u8 *Tiles = (u8*)PA_BgInfo[screen][bg_number].Infos.Tiles;
 	return Tiles[tilepix+x+(y<<3)];
@@ -62,7 +64,8 @@ u8 PAEasyBgGetPixelInf(u8 screen, u8 bg_number, s32 x, s32 y) {
 	u8 vflip = (Map[mappos] >> 30) & 1;
 	x &= 7; y &= 7; // Adjust in tile...
 
-	if (hflip) x = 7 - x;   if (vflip) y = 7 - y;   // Adjust flips...
+	if (hflip) x = 7 - x;   
+	if (vflip) y = 7 - y;   // Adjust flips...
 
 	u8 *Tiles = (u8*)PA_BgInfo[screen][bg_number].Infos.Tiles;
 	return Tiles[tilepix+x+(y<<3)];

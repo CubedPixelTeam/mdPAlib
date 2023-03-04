@@ -121,13 +121,7 @@ u16 PA_CreateGfx(u8 screen, void* obj_data, u8 obj_shape, u8 obj_size, u8 color_
 		PA_Error(
 		    "\n"
 		    "   Sorry, but there's not enough\n"
-		    "  VRAM to load all your sprites!\n"
-		    "        Load less sprites or use\n"
-		    "  PA_CloneSprite or PA_CreateGfx\n"
-		    "   and PA_CreateSpriteFromGfx to\n"
-		    "        optimize the space used.\n"
-		    "   Alternatively you can use 16c\n"
-		    "                        sprites.\n");
+		    "  VRAM to load all your sprites!\n");
 
 		for (;;) swiWaitForVBlank();
 	}

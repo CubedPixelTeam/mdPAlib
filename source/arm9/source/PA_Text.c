@@ -78,13 +78,12 @@ void PA_OutputText(u8 screen, u16 x, u16 y, const char* text, ...) {
 	int j, i, k = 0;
 	u16 textcount = 0; // compte le nombre de lettres...
 	u8 PAtext[32]; // tableau où l'on copie les nombres et tout...
-	u8 PAtextcount = 0; // Quand on a un nombre, il faut savoir sa longueur
+	
 	u8 *PAextext; // Extra text
 	s32 PAtextnumber;
 	double tempdouble = 0;
 	va_list varg;           /* Variable identifiant le prochain paramètre. */
 	va_start(varg, text);
-	PAtextcount = 0;
 	u8 textcolor = PAtext_pal[screen];
 
 	for (j = 0; text[j]; j++) {

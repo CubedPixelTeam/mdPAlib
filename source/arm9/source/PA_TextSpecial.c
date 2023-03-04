@@ -71,7 +71,6 @@ u32 PA_BoxTextNoWrap(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const 
 u32 PA_BoxText(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const char *text, u32 limit) {
 	s16 i, j;
 	s16 x, y;
-	s16 letter;
 	x = basex;
 	y = basey;
 	u16 ylimit = maxy;
@@ -111,7 +110,6 @@ u32 PA_BoxText(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const char *
 
 			//PA_OutputText(0, 0, 0, "%d ", temp);
 			while (!((text[i+wordletter] <= 32) || ((text[i+wordletter] == '%') && (text[i+wordletter+1] == 'c')))) { // >= 32, donc si 0, '\n', on ' ' :)
-				letter = text[i+wordletter] - 32;
 				wordx++;
 				wordletter++;
 			}
