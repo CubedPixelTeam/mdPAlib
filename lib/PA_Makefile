@@ -30,6 +30,8 @@ ifneq ($(strip $(MAKEFILE_VER)),ver2)
 $(error Your PAlib version is outdated. Please go to http://www.palib-dev.com to get the latest)
 endif
 
+NITRODATA	:=	filesystem
+
 PATH   := $(DEVKITARM)/bin:$(PATH)
 PAPATH  = $(DEVKITPRO)/PAlib
 
@@ -154,6 +156,10 @@ endif
 export OUTPUT := $(OUTPATH)/$(TARGET)
 export VPATH  := $(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
                  $(foreach dir,$(DATA),$(CURDIR)/$(dir))
+
+ifneq ($(strip $(NITRODATA)),)
+	export NITRO_FILES	:=	$(CURDIR)/$(NITRODATA)
+endif
 
 # Determine the name of the tools
 
