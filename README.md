@@ -18,4 +18,4 @@ All 8bit or 16bit functions (text and backgrounds)<br>
 WiFi<br>
 JPEG loading functions.<br>
 Any external input exept for the DS pad. (GHControlers, Motion controls)<br>
-PA_Gifs are broken thanks to the removal of 8bit functions but they are still present and should work if i just put in the file. <br>
+PA_Gifs
