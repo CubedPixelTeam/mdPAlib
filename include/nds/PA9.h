@@ -97,6 +97,7 @@ extern "C"{
 #include "arm9/PA_Gif.h"
 #include "arm9/PA_BgTrans.h"
 #include "arm9/PA_KeysSpecial.h"
+#include "arm9/NitroBackgroundsLib.h"
 	
 #include "arm9/as_lib9.h"
 
