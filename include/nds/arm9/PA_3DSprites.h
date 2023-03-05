@@ -1,9 +1,6 @@
 #ifndef _PA_3DSPRITES_
 #define _PA_3DSPRITES_
 
-static inline u16 PA_GetGifWidth(void* gif);
-static inline u16 PA_GetGifHeight(void* gif);
-
 #define PA_NMAXSPRITES 1024
 
 #define TEX_A3I5   1

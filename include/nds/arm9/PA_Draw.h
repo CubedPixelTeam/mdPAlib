@@ -15,7 +15,6 @@ extern "C" {
 
 #include "PA_Interrupt.h"
 #include "PA_Palette.h"
-#include "PA_Gif.h"
 
 extern u8 PA_nBit[2]; // 8 or 16 bit Bg
 
