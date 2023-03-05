@@ -16,8 +16,6 @@ u8 PA_Screen = 0;
 
 s16 PA_ScreenSpace; // Espace entre les 2 écrans...+192
 
-PA_GifInfos PA_GifInfo;
-
 Pads Pad;
 PA_Pad* PadPointer;
 

@@ -107,8 +107,6 @@ void PA_Init(){
 
 	PA_UpdateUserInfo();
 	PA_SetScreenSpace(48);       // Default spacing
-	PA_GifInfo.StartFrame = 0;   // start from the beginning
-	PA_GifInfo.EndFrame = 10000; // random high number
 	PA_UpdateRTC();
 	PA_InitRand();
 
