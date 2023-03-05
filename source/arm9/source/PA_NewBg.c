@@ -58,22 +58,6 @@ void PA_LoadBackground(u8 screen, u8 bg_select, const PA_BgStruct* bg){
 
 			PA_InitLargeBg(screen, bg_select, bg->width >> 3, bg->height >> 3, (void*) bg->BgMap);
 			break;
-
-		case PA_BgRot:
-			PA_Assert(bg_select >= 2, "Invalid background");
-			PA_Assert(PA_GetVideoMode(screen) != 0, "Invalid video mode");
-
-			PA_Load8bitBgPal(screen, (void*) bg->BgPalette);
-
-			tempsize = PA_GetPAGfxRotBgSize(bg->width);
-
-			PA_DeleteBg(screen, bg_select);
-			PA_LoadBgTilesEx(screen, bg_select, (void*) bg->BgTiles, bg->BgTiles_size >> 1);
-			PA_LoadRotBgMap(screen, bg_select, (void*) bg->BgMap, tempsize);
-
-			PA_InitBg(screen, bg_select, tempsize, 0, 1);
-			PA_SetBgRot(screen, bg_select, 0, 0, 0, 0, 0, 256);
-			break;
 	}
 }
 
