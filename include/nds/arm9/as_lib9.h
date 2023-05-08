@@ -392,7 +392,7 @@ static inline void AS_SetDefaultSettings(u8 format, s32 rate, u8 delay)
 
 // play a sound using the priority system with the default settings
 // return the sound channel allocated or -1 if the sound was skipped
-static inline int AS_SoundDefaultPlay(u8 *data, u32 size, u8 volume, u8 pan, u8 loop, u8 prio)
+static inline int AS_SoundDefaultPlay(u8 *data, u32 size, u8 volume, s8 pan, u8 loop, u8 prio)
 {
     SoundInfo snd = { 
         data, 
