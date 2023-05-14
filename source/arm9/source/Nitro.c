@@ -1,10 +1,33 @@
 #include "PA9.h"
+#include <stdio.h>
+#include <filesystem.h>
 
 char *TileBuffer;
 char *MapBuffer;
 char *PalBuffer;
 
 FAT_INFOBGFILE Fat_BgInfo;	
+
+unsigned char* SpriteCustom[128] _GFX_ALIGN;
+unsigned short PaletteCustom[256] _GFX_ALIGN;
+FILE* File;
+u32 Size;
+void ParseLine(char* line,char* dest, s16 startByte, s32 arraySize){
+	memset(dest,0,arraySize);
+	int i=0;
+	s16 firstbyte=0,lastbyte=0, difference=0;
+	for(i=startByte;i<arraySize;i++)
+	{
+		if(firstbyte==0 && line[i]!=PA_TAB &&line[i]!='{' )firstbyte=i;
+		if(lastbyte==0 && (line[i]==',' ||line[i]=='}') )lastbyte=i;
+		if(firstbyte>0 && lastbyte>0)
+		{
+			difference=lastbyte-firstbyte;
+			break;
+		}
+	}
+	memcpy (dest,line+firstbyte,difference);
+}
 char* FatLoad(char *filename)
 {
 	FILE* File = fopen (filename, "rb"); 
@@ -186,4 +209,17 @@ s8 FAT_LoadBackground(u8 screen, u8 bg_select, const char *name)
 	free(MapBuffer);
 	free(PalBuffer);
 	return 1;
+}
+
+void FAT_LoadSprite(u8 ID, char* spritename, char* palname){
+	File = fopen (palname, "rb"); 
+	fread (PaletteCustom, 1, sizeof(PaletteCustom), File);
+	fclose (File);
+	File = fopen (spritename, "rb");
+	fseek (File, 0 , SEEK_END);
+	Size = ftell (File);
+	rewind (File);
+	SpriteCustom[ID] = malloc(Size); 
+	fread (SpriteCustom[ID], 1, Size, File);
+	fclose (File);	
 }
