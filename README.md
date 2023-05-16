@@ -1,4 +1,5 @@
 # mdPAlib
+# Re-patch of PAlib in progress due to weird errors.
 Modern Debloated Programmer's Arsenal Library. yes, longest name ever.<br><br>
 
 mdPAlib is a PAlib fork that has less bloat, it is much faster, much smaller, and *works on modern devkitarm*. It should be a drop in replacement for PAlib but just remember that if your proyect uses some features that were removed because they were "bloat" then it won't work<br><br>
