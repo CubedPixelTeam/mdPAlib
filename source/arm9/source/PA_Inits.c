@@ -45,7 +45,7 @@ extern funcpointer SpriteVBL;
 
 void PA_Init2D(){
 	// Turn on the 2D cores and unset the switch screens flag
-	REG_POWERCNT &= ~SWITCH_SCREENS;
+	lcdMainOnBottom();
 	powerOn(POWER_2D_A | POWER_2D_B);
 
 	// Set up the 2D cores
@@ -72,13 +72,15 @@ void PA_Init2D(){
 
 	// Initialize the background and sprite system
 	PA_ResetBgSys();
+  
 	PA_ResetSpriteSys();
 
 	// VBL Inits
-	SpriteVBL = PA_UpdateSpriteVBL;
+	SpriteVBL = PA_Nothing;
+
+
 }
 
-void PA_Nothing(){}
 
 void PA_Init(){
 	register int i;
@@ -107,6 +109,7 @@ void PA_Init(){
 
 	PA_UpdateUserInfo();
 	PA_SetScreenSpace(48);       // Default spacing
+
 	PA_UpdateRTC();
 	PA_InitRand();
 

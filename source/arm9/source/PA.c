@@ -6,15 +6,15 @@ u16 pa_giftotexcolor = 0;
 volatile PA_IPCType PA_IPC; // lololololol this is deprecated
 
 typedef struct{
-	s16 x, y, oldx, oldy, vx, vy; // Coordonnées
-	u8 stylus; // Si on déplace ou non
+	s16 x, y, oldx, oldy, vx, vy; // Coordonnï¿½es
+	u8 stylus; // Si on dï¿½place ou non
 	u8 moving; // Si la boule est en mouvement ou non
 }positions;
 
 u32 PA_bgmap[2][4]; // Pointeur vers les maps, 4 maps par screen
 u8 PA_Screen = 0;
 
-s16 PA_ScreenSpace; // Espace entre les 2 écrans...+192
+s16 PA_ScreenSpace; // Espace entre les 2 ï¿½crans...+192
 
 Pads Pad;
 PA_Pad* PadPointer;
@@ -25,6 +25,38 @@ PA_movingsprite PA_MovedSprite; // Pour les sprites que l'on bouge...
 
 u8 PA_MoveSpriteType = 0;
 
+void PA_CFadeInSys(){
+	int i = 0;
+	for (i = -31; i <= 0; i++)
+	{
+		PA_SetBrightness(0, i);
+		PA_SetBrightness(1, i);
+		PA_WaitForVBL();
+	}
+}
+void PA_CFadeIn(u8 screen){
+	int i = 0;
+	for (i = -31; i <= 0; i++)
+	{
+		PA_SetBrightness(screen, i);
+		PA_WaitForVBL();
+	}
+}
+void PA_CFadeOutSys(){
+	int i = 0;
+	for (i = 0; i >= -31; i--) {
+		PA_SetBrightness(0, i);
+		PA_SetBrightness(1, i);
+		PA_WaitForVBL(); 
+	}	
+}
+void PA_CFadeOut(u8 screen){
+	int i = 0;
+	for (i = 0; i >= -31; i--) {
+		PA_SetBrightness(screen, i);
+		PA_WaitForVBL(); 
+	}	
+}
 void PA_SetBrightness(u8 screen, s8 bright){
 	u16 mode = 1 << 14;
 	if(bright < 0){
@@ -37,6 +69,10 @@ void PA_SetBrightness(u8 screen, s8 bright){
 	if(screen) REG_MASTER_BRIGHT_SUB = brightreg;
 	else REG_MASTER_BRIGHT = brightreg;
 }
+
+void PA_Nothing(){
+}
+
 u8 PA_CheckLid(){
 	if(!PA_LidClosed()) return 0;
 

@@ -818,6 +818,31 @@ static inline void PA_ClearBg(u8 screen, u8 bg_select){
          \~english Background name
          \~french Nom du fond	 
 */
+#define PA_EasyBgLoad(screen, bg_number, bg_name)	do{PA_BgInfo[screen][bg_number].BgMode = bg_name##_Info[0];\
+	PA_DEPRECATED_MACRO;\
+	PA_StoreEasyBgInfos(screen, bg_number, bg_name##_Info[0], bg_name##_Info[1], bg_name##_Info[2], (void*)bg_name##_Tiles, SIZEOF_16BIT(bg_name##_Tiles), (void*)bg_name##_Map, SIZEOF_16BIT(bg_name##_Map), (void*)bg_name##_Pal);\
+	if(PA_BgInfo[screen][bg_number].BgMode == BG_TILEDBG){	PA_LoadTiledBg(screen, bg_number, bg_name);}\
+	else{PA_LoadPAGfxLargeBg(screen, bg_number, bg_name);}}while(0)
+
+/*! \def PA_EasyBgLoadPtr(screen, bg_number, bg_name)
+	\deprecated
+    \brief
+         \~english [DEPRECATED] Easiest way to load a background converted with PAGfx... Can take pointers !
+         \~french [DEPRECATED] Moyen le plus simple de charger un fond créé avec PAGfx... Peut prendre des pointeurs !
+    \~\param screen
+         \~english Choose de screen (0 or 1)
+         \~french Choix de l'écran (0 ou 1)
+    \~\param bg_number
+         \~english Background number... (0-3)
+         \~french Numéro du fond...	 (0-3)
+    \~\param bg_name
+         \~english Background, like &bg0
+         \~french Fond, par exemple &bg0
+*/	
+#define PA_EasyBgLoadPtr(screen, bg_number, bg_name) do{\
+	PA_DEPRECATED_MACRO;\
+	PA_EasyBgLoadEx(screen, bg_number, (u32*)bg_name->Info, bg_name->Tiles, bg_name->TileSize, bg_name->Map, bg_name->MapSize, bg_name->Palette);\
+}while(0)
 
 /*!
     \fn void PA_EasyBgScrollX(u8 screen, u8 bg_number, s32 x)

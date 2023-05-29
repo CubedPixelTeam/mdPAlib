@@ -8,7 +8,6 @@ extern "C" {
 #include <PA_IPC.h>
 #include <PA_FifoMessages.h>
 
-#include <arm9/as_lib9.h>
 #include <arm9/PA_Sound.h>
 #include <arm9/PA_Interrupt.h>
 
@@ -19,7 +18,7 @@ extern "C" {
 
 #include "../PA_Transfer.h"
 
-#include <stdarg.h> // Pour le système de text
+#include <stdarg.h> // Pour le systï¿½me de text
 #include <string.h>
 
 #ifndef PA_NO_DEPRECATION
@@ -34,7 +33,6 @@ static inline void _PA_DeprecationStub() __attribute__((deprecated));
 static inline void _PA_DeprecationStub(){}
 
 extern u8 PA_Screen;
-
 typedef struct {
 	u16 Year;
 	u8 Month;
@@ -48,7 +46,7 @@ extern RTC PA_RTC;
 
 static inline void PA_WaitForVBL();
 
-extern s16 PA_ScreenSpace; // Espace entre les 2 écrans...+192
+extern s16 PA_ScreenSpace; // Espace entre les 2 ï¿½crans...+192
 
 #define PAWaitForVBL() swiWaitForVBlank()
 /*
@@ -57,6 +55,10 @@ static inline void PAWaitForVBL(){
 	swiWaitForVBlank();
 }
 */
+void PA_CFadeInSys();
+void PA_CFadeIn(u8 screen);
+void PA_CFadeOutSys();
+void PA_CFadeOut(u8 screen);
 static inline void PA_PowerOff(){
 	powerOn(PM_SYSTEM_PWR);
 }
@@ -88,7 +90,7 @@ extern u8 pa_checklid;
 #define DMA_CopyEx(type, source, dest, count, mode) do{DMA_SRC(type) = (u32)source; DMA_DEST(type) = (u32)dest; DMA_CR(type) = (count) | (mode);}while(0)
 
 
-// Commandes pour la lumière des écrans
+// Commandes pour la lumiï¿½re des ï¿½crans
 #define BACKLIGHT(screen)	BIT(2+screen)
 
 #define ALWAYSINLINE __attribute__((always_inline)) static inline
@@ -111,7 +113,7 @@ extern u8 pa_checklid;
 extern volatile DEPRECATED PA_IPCType PA_IPC;
 
 //////////////////////////////////////////////////////////////////////
-// Général
+// Gï¿½nï¿½ral
 //////////////////////////////////////////////////////////////////////
 
 #define SIZEOF_8BIT(x)  (sizeof(x))
@@ -119,7 +121,6 @@ extern volatile DEPRECATED PA_IPCType PA_IPC;
 #define SIZEOF_32BIT(x) (sizeof(x)>>2)
 
 #define PACKED __attribute__ ((packed))
-
 // Jpeg functions:
 void PA_jpeg_GetImageSize(char* name, int* width, int* height);
 void PA_jpeg_BltImage(char* name, u16* vram, int output_width, int output_height);
@@ -136,7 +137,7 @@ typedef struct {
    u8 NameLength;
    u8 Message[53];
    u8 MessageLength;
-   u8 Language; // Langue... 0 pour Jap, 1 pour anglais, 2 pour français...
+   u8 Language; // Langue... 0 pour Jap, 1 pour anglais, 2 pour franï¿½ais...
 } infos;
 extern infos PA_UserInfo;
 
@@ -148,14 +149,14 @@ extern infos PA_UserInfo;
 /*! \fn void PA_Init(void)
     \brief
          \~english Initialise the library. Should be used at the beginning of main()
-         \~french Initialise la lib... Doit etre placé au début de main()
+         \~french Initialise la lib... Doit etre placï¿½ au dï¿½but de main()
 */
 void PA_Init();
 
 /*! \fn void PA_InitFifo()
     \brief
          \~english Initialize the Fifo system. It is automatically done in PA_Init().
-         \~french Initialise le système Fifo. C'est fait automatiquement dans PA_Init().
+         \~french Initialise le systï¿½me Fifo. C'est fait automatiquement dans PA_Init().
 */
 void PA_InitFifo();
 
@@ -174,7 +175,7 @@ void PA_InitFifo();
 /*! \fn void PA_Init2D(void)
     \brief
          \~english Resets to 2D state after using 3D functions
-         \~french Remet en mode 2D après avoir utilisé la 3D
+         \~french Remet en mode 2D aprï¿½s avoir utilisï¿½ la 3D
 */
 void PA_Init2D();
 
@@ -184,7 +185,7 @@ extern u8 PA_ExtPal[2][2];
 /*! \fn void PA_SetVideoMode(u8 screen, u8 mode)
     \brief
          \~english Change the video mode... Use this with caution
-         \~french Changer de mode video... A utiliser avec précaution
+         \~french Changer de mode video... A utiliser avec prï¿½caution
     \~\param screen
          \~english Screen...
          \~french Ecran...
@@ -200,7 +201,7 @@ void PA_SetVideoMode(u8 screen, u8 mode);
 /*! \fn void PA_UpdateUserInfo(void)
     \brief
          \~english Updates the user info. This is automatically done in PA_Init. You can then get any info with the following variables : PA_UserInfo.Color (favorite color), .BdayDay, .BdayMonth, .AlarmHour, .AlarmMinute, .Name, .NameLength, .Message, .MessageLength, .Language
-         \~french Met à jour les infos sur l'utilisateur... C'est fait automatiquement dans PA_Init. On peut ensuite récupérer toutes les infos avec PA_UserInfo.Color (couleur favorite), .BdayDay, .BdayMonth, .AlarmHour, .AlarmMinute, .Name, .NameLength, .Message, .MessageLength, .Language
+         \~french Met ï¿½ jour les infos sur l'utilisateur... C'est fait automatiquement dans PA_Init. On peut ensuite rï¿½cupï¿½rer toutes les infos avec PA_UserInfo.Color (couleur favorite), .BdayDay, .BdayMonth, .AlarmHour, .AlarmMinute, .Name, .NameLength, .Message, .MessageLength, .Language
 */
 void PA_UpdateUserInfo(void);
 
@@ -208,14 +209,14 @@ void PA_UpdateUserInfo(void);
 /*! \fn void PA_UpdateRTC(void)
     \brief
          \~english Updates the Real Time Clock, with info on the current date and hour. Automatically updated in the PA VBL... Get the info with PA_RTC.Minutes, .Hour, .Seconds, .Day, .Month, and .Year
-         \~french Met à jour les infos sur l'heure et la date. C'est automatiquement mis à jour dans le VBL PA... On récupère les infos avec PA_RTC.Minutes, .Hour, .Seconds, .Day, .Month, et .Year
+         \~french Met ï¿½ jour les infos sur l'heure et la date. C'est automatiquement mis ï¿½ jour dans le VBL PA... On rï¿½cupï¿½re les infos avec PA_RTC.Minutes, .Hour, .Seconds, .Day, .Month, et .Year
 */
 void PA_UpdateRTC(void);
 
 /*! \fn static inline void PA_SwitchScreens()
     \brief
          \~english Switch the bottom and top screens...
-         \~french Echange les écrans du haut et du bas
+         \~french Echange les ï¿½crans du haut et du bas
 */
 static inline void PA_SwitchScreens() {
 	REG_POWERCNT ^= SWITCH_SCREENS; 
@@ -227,17 +228,17 @@ extern vu8 _PA_LidDown;
 /*! \def PA_LidClosed()
     \brief
          \~english Check if the DS is closed. Returns 0 if open, 1 if closed
-         \~french Vérifie si la DS est fermée. Renvoie 0 si ouverte, 1 si fermée
+         \~french Vï¿½rifie si la DS est fermï¿½e. Renvoie 0 si ouverte, 1 si fermï¿½e
 */
 #define PA_LidClosed() _PA_LidDown
 
 /*! \fn static inline void PA_SetAutoCheckLid(u8 on)
     \brief
          \~english Automatically check if the DS is closed in PA_WaitForVBL
-         \~french Vérifie automatiquement si la DS est fermée dans PA_WaitForVBL
+         \~french Vï¿½rifie automatiquement si la DS est fermï¿½e dans PA_WaitForVBL
     \~\param on
          \~english 1 for on, 0 for off
-         \~french 1 pour activer, 0 pour désactiver
+         \~french 1 pour activer, 0 pour dï¿½sactiver
 */
 static inline void PA_SetAutoCheckLid(u8 on){
 	pa_checklid = on;
@@ -248,7 +249,7 @@ static inline void PA_SetLedBlink(u8 blink, u8 speed);
 /*! \fn u8 PA_CheckLid()
     \brief
          \~english Check if the DS is closed. If closed, it pauses the DS, and returns 1.
-         \~french Vérifie si la DS est fermée. Si fermée, ca met en pause la DS et renvoie 1.
+         \~french Vï¿½rifie si la DS est fermï¿½e. Si fermï¿½e, ca met en pause la DS et renvoie 1.
 */
 u8 PA_CheckLid();
 
@@ -257,8 +258,10 @@ u8 PA_CheckLid();
          \~english Wait for the VBlank to occur
          \~french Attendre le vbl...
 */
+void C_UpdateSprites();
 static inline void PA_WaitForVBL(){
 	if(pa_checklid) PA_CheckLid();
+     C_UpdateSprites();
 	swiWaitForVBlank();
 }
 
@@ -267,10 +270,10 @@ static inline void PA_WaitForVBL(){
 /*! \def PA_CloseLidSound(close_sound)
     \brief
          \~english Check if the DS is closed. If closed, it pauses the DS, and plays a sound
-         \~french Vérifie si la DS est fermée. Si fermée, ca met en pause la DS et joue un son
+         \~french Vï¿½rifie si la DS est fermï¿½e. Si fermï¿½e, ca met en pause la DS et joue un son
     \~\param close_sound
          \~english Sound to play, check the sounds doc if you're not sure what to do here
-         \~french Son à jouer, regarder la doc son si pas certain de quoi mettre... 
+         \~french Son ï¿½ jouer, regarder la doc son si pas certain de quoi mettre... 
 */
 #define PA_CloseLidSound(close_sound)do{\
 	if(PA_LidClosed()){\
@@ -282,13 +285,13 @@ static inline void PA_WaitForVBL(){
 /*! \def PA_CloseLidSound2(close_sound, open_sound)
     \brief
          \~english Check if the DS is closed. If closed, it pauses the DS, and plays a sound. The sound system must be initialized before.
-         \~french Vérifie si la DS est fermée. Si fermée, ca met en pause la DS et joue un son
+         \~french Vï¿½rifie si la DS est fermï¿½e. Si fermï¿½e, ca met en pause la DS et joue un son
     \~\param close_sound
          \~english Sound to play when closes, check the sounds doc if you're not sure what to do here
-         \~french Son à jouer quand se ferme, regarder la doc son si pas certain de quoi mettre...
+         \~french Son ï¿½ jouer quand se ferme, regarder la doc son si pas certain de quoi mettre...
     \~\param open_sound
          \~english Sound to play when opens, check the sounds doc if you're not sure what to do here
-         \~french Son à jouer quand s'ouvre, regarder la doc son si pas certain de quoi mettre... 
+         \~french Son ï¿½ jouer quand s'ouvre, regarder la doc son si pas certain de quoi mettre... 
 */
 #define PA_CloseLidSound2(close_sound, open_sound)do{\
 	if(PA_LidClosed()){\
@@ -300,13 +303,13 @@ static inline void PA_WaitForVBL(){
 /*! \fn void PA_SetScreenLight(u8 screen, u8 light)
     \brief
          \~english Set on or off the screen's light
-         \~french Allumer ou eteindre la lumière d'un écran
+         \~french Allumer ou eteindre la lumiï¿½re d'un ï¿½cran
     \~\param screen
          \~english Screen...
          \~french Ecran...
     \~\param light
          \~english Light, 1 for on, 0 for off
-         \~french Lumière, 1 pour allumé, 0 pour éteint
+         \~french Lumiï¿½re, 1 pour allumï¿½, 0 pour ï¿½teint
 */
 static inline void PA_SetScreenLight(u8 screen, u8 light){
 	// Beware of the nested one-line IF blocks!
@@ -326,10 +329,10 @@ static inline void PA_SetScreenLight(u8 screen, u8 light){
 /*! \fn static inline void PA_SetLedBlink(u8 blink, u8 speed)
     \brief
          \~english Set teh DS Led blinking
-         \~french Régler le clignotement de la led
+         \~french Rï¿½gler le clignotement de la led
     \~\param blink
          \~english 1 for blinking, 0 for always on
-         \~french 1 pour clignoter, 0 pour toujours allumé
+         \~french 1 pour clignoter, 0 pour toujours allumï¿½
     \~\param speed
          \~english Speed : 0 for slow, 1 for fast
          \~french Vitesse : 0 pour lent, 1 pour rapide
@@ -341,10 +344,10 @@ static inline void PA_SetLedBlink(u8 blink, u8 speed){
 /*! \def PA_WaitFor(something)
     \brief
          \~english Wait for a specific thing to happen...
-         \~french Attendre un événement précis...
+         \~french Attendre un ï¿½vï¿½nement prï¿½cis...
     \~\param something
          \~english Thing to wait for, like Pad.Newpress.A, or Stylus.Newpress, etc...
-         \~french Evénement à attendre, comme Pad.Newpress.A, ou Stylus.Newpress, etc...
+         \~french Evï¿½nement ï¿½ attendre, comme Pad.Newpress.A, ou Stylus.Newpress, etc...
 */
 
 #define PA_WaitFor(something) do{while(!(something)) PA_WaitForVBL();}while(0)
@@ -352,10 +355,10 @@ static inline void PA_SetLedBlink(u8 blink, u8 speed){
 /*! \fn static inline void PA_SetDSLBrightness(u8 level)
     \brief
          \~english Set the DS Lite Light level...
-         \~french Régler le niveau de lumière de la DS Lite !
+         \~french Rï¿½gler le niveau de lumiï¿½re de la DS Lite !
     \~\param level
          \~english Light level (0-3)
-         \~french Niveau de la lumière (0-3)
+         \~french Niveau de la lumiï¿½re (0-3)
 */
 static inline void PA_SetDSLBrightness(u8 level){
 	PA_FifoMsg msg;
@@ -380,10 +383,14 @@ static inline void PA_SetDSLBrightness(u8 level){
 	\return
 		true if the target was found
 */
+bool PA_Locate(char* start, char* target, bool isDir, int depth, char* result);
+
 /// Displays an error message.
 void PA_Error(const char* text);
 
 /** @} */ // end of General
+
+void PA_Nothing(void);
 
 #ifdef __cplusplus
 }

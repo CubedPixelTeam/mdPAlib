@@ -5,8 +5,11 @@
 // Interrupts
 //////////////////////////////////////////////////////////////////////
 
-funcpointer CustomVBL = 0;
-funcpointer SpriteVBL = 0;
+funcpointer CustomVBL = PA_Nothing;
+funcpointer MotionVBL = PA_Nothing;
+funcpointer GHPadVBL  = PA_Nothing;
+funcpointer PaddleVBL = PA_Nothing;
+funcpointer SpriteVBL = PA_Nothing;
 
 s32 PA_VBLCounter[16]; // VBL counters
 bool PA_VBLCounterOn[16]; // VBL counters enable/disable flag
@@ -37,6 +40,10 @@ void PA_vblFunc(){
 
 	SpriteVBL();
 
+	// Update the external pads
+	MotionVBL();
+	GHPadVBL();
+	PaddleVBL();
 
 	// Update the RTC
 	PA_UpdateRTC();

@@ -70,6 +70,7 @@ extern "C"{
 #include "PA_FifoMessages.h"
 #include "PA_BgStruct.h"
 
+#include "arm9/jpeg.h"
 
 #include "arm9/PA_Assert.h"
 #include "arm9/PA_General.h"
@@ -94,11 +95,14 @@ extern "C"{
 #include "arm9/PA_Keyboard.h"
 #include "arm9/PA_Window.h"
 #include "arm9/PA_3DSprites.h"
+#include "arm9/PA_IA.h"
+#include "arm9/PA_16c.h"
 #include "arm9/PA_BgTrans.h"
 #include "arm9/PA_KeysSpecial.h"
+#include "arm9/PA_Fake16bit.h"
+#include "arm9/PA_Debug.h"
 #include "arm9/nitro.h"
-	
-#include "arm9/as_lib9.h"
+
 
 #ifdef __cplusplus
 }

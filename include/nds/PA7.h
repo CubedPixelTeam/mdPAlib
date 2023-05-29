@@ -15,7 +15,6 @@ extern "C" {
 #include "PA_FifoMessages.h"
 #include "PA_Transfer.h"
 
-#include "arm7/as_lib7.h"
 
 void PA_Init(bool sound);
 

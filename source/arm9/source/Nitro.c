@@ -1,47 +1,28 @@
 #include "PA9.h"
 #include <stdio.h>
 #include <filesystem.h>
-
-char *TileBuffer;
-char *MapBuffer;
-char *PalBuffer;
-
-FAT_INFOBGFILE Fat_BgInfo;	
+PA_BgInfos FAT_Info[2][4];
 
 unsigned char* SpriteCustom[128] _GFX_ALIGN;
 unsigned short PaletteCustom[256] _GFX_ALIGN;
+
 FILE* File;
 u32 Size;
-void ParseLine(char* line,char* dest, s16 startByte, s32 arraySize){
-	memset(dest,0,arraySize);
-	int i=0;
-	s16 firstbyte=0,lastbyte=0, difference=0;
-	for(i=startByte;i<arraySize;i++)
-	{
-		if(firstbyte==0 && line[i]!=PA_TAB &&line[i]!='{' )firstbyte=i;
-		if(lastbyte==0 && (line[i]==',' ||line[i]=='}') )lastbyte=i;
-		if(firstbyte>0 && lastbyte>0)
-		{
-			difference=lastbyte-firstbyte;
-			break;
-		}
-	}
-	memcpy (dest,line+firstbyte,difference);
-}
-char* FatLoad(char *filename)
+char* FatLoad(const char *filename)
 {
 	FILE* File = fopen (filename, "rb"); 
 	if(File)// Make sure there is a file to load
 	{ 
-		u32 Size;
 		fseek (File, 0 , SEEK_END);
 		Size = ftell (File);
 		rewind (File);
 		char *buffer = (char*) malloc (sizeof(char)*Size);
 		if(buffer!=NULL){
+			fseek (File, 0 , SEEK_SET);
 			fread (buffer, 1, Size, File);
 
 			fclose (File);
+			DC_FlushAll();
 			return buffer;
 			free(buffer);
 		}
@@ -52,6 +33,52 @@ char* FatLoad(char *filename)
 		}
 	}
 	return NULL;
+}
+
+u8 GetPixelWBL(const char* bgmap,const char*bgtiles,u8 screen, u8 bg_number, s32 x, s32 y, int scrollx, int scrolly,int width, int height) {
+	// Adjust X/Y values
+	x += scrollx; x &= (width- 1);
+	y += scrolly; y %= (height);
+	s32 mappos;
+
+	if ((x <= 256) && (y <= 256)) {// Normal default size
+		mappos = (x >> 3) + ((y >> 3) * 32); // Adjust position in map
+	} else if ((x > 256) && (y <= 256)) {
+		mappos = 32 * 32 + ((x & 255) >> 3) + ((y >> 3) * 32); // Adjust position in map
+	} else if ((x <= 256) && (y > 256)) { // Tall
+		mappos = 64 * 32 + (x >> 3) + (((y - 256) >> 3) * 32); // Adjust position in map
+	} else {
+		mappos = 96 * 32 + ((x - 256) >> 3) + (((y - 256) >> 3) * 32); // Adjust position in map
+	}
+
+	u16 *Map = (u16*)bgmap;
+	s32 tilepix = (Map[mappos] & 1023) << 6;
+	u8 hflip = (Map[mappos] >> 10) & 1;
+	u8 vflip = (Map[mappos] >> 11) & 1;
+	x &= 7; y &= 7; // Adjust in tile...
+
+	if (hflip) x = 7 - x;   
+	if (vflip) y = 7 - y;   // Adjust flips...
+
+	u8 *Tiles = (u8*)bgtiles;
+	return Tiles[tilepix+x+(y<<3)];
+}
+char* FatLoadPal(const char *filename)
+{
+	FILE* File = fopen (filename, "rb"); 
+	fseek (File, 0 , SEEK_END);
+	Size = ftell (File);
+	if(Size < 512) Size = 512;
+	rewind (File);
+	char *buffer = (char*) calloc (Size,sizeof(char));
+	
+	fread (buffer, 1, Size, File);
+
+	fclose (File);
+	return buffer;
+	free(buffer);
+	
+	return 0;
 }
 
 void FAT_BgLoad(s8 screen,s8 bg_select,s8 Bgtype,s16 width,s16 height,void *Tiles,u32 tilesize,void* Map,u32 mapsize,void *Pal){
@@ -126,100 +153,38 @@ void FAT_BgLoad(s8 screen,s8 bg_select,s8 Bgtype,s16 width,s16 height,void *Tile
 			break;
 	}
 }
-FAT_INFOBGFILE FAT_LoadBgInfo(const char *name){
-	FAT_INFOBGFILE tempstruct;
-	
-	char tempwidth[10];
-	char InfoStruct[4][32];
-	FILE* cfile = fopen (name, "rb"); //rb = read
-	if(cfile)
-	{
-		//scan the important lines in the .c file into the memory for easy parsing
-		s8 TextBlock=0,LineCount=0;
-		while(!feof (cfile))
-		{
-			if(LineCount==7 || LineCount==8 || LineCount==14 || LineCount==15){
-				fgets ((char*)InfoStruct[TextBlock],32,cfile);
-				TextBlock++;
-				LineCount++;
-			}
-			else if(fgetc (cfile)=='\n')LineCount++;
-		}
-		fclose(cfile);
-		
-		char TempBuf[256];
-		
-		ParseLine((char*)InfoStruct[0],TempBuf,0,255);
-		sprintf(tempstruct.BGType,"%s",TempBuf);
-		
-		ParseLine((char*)InfoStruct[1],TempBuf,0,255);
-		tempstruct.width=atoi(TempBuf);
-		
-		ParseLine((char*)InfoStruct[1],TempBuf,sprintf(tempwidth,"%d",tempstruct.width)+2,255);
-		tempstruct.height=atoi(TempBuf);	
-		
-		ParseLine((char*)InfoStruct[2],TempBuf,0,255);
-		tempstruct.tilesize=atoi(TempBuf);	
-		
-		ParseLine((char*)InfoStruct[3],TempBuf,0,255);
-		tempstruct.mapsize=atoi(TempBuf);	
-
-		tempstruct.Error=0;
-
-		//determine background type
-		if(!strcmp(tempstruct.BGType, "PA_BgNormal"))tempstruct.Bgtype=PA_BgNormal;
-		else if(!strcmp(tempstruct.BGType, "PA_BgLarge"))tempstruct.Bgtype=PA_BgLarge;
-		else if(!strcmp(tempstruct.BGType, "PA_BgUnlimited"))tempstruct.Bgtype=PA_BgUnlimited;
-		else if(!strcmp(tempstruct.BGType, "PA_BgRot"))tempstruct.Bgtype=PA_BgRot;
-		else tempstruct.Error=1;
-
-		return tempstruct;
-	}
-	else{
-		tempstruct.Error=2;
-		return tempstruct;
-	}
-}
-s8 FAT_LoadBackground(u8 screen, u8 bg_select, const char *name)
-{
+s8 FAT_LoadBackground(u8 screen, u8 bg_select, int width, int height, u8 type,const char *name){
+	FAT_INFOBGFILE Fat_BgInfo;
 	char TempName[256];
+	//empty this shit
+	free(FAT_Info[screen][bg_select].Infos.Tiles);
+	free(FAT_Info[screen][bg_select].Infos.Map);
+	free(FAT_Info[screen][bg_select].Infos.Palette);
+
+	FAT_Info[screen][bg_select].Infos.Tiles=NULL;
+	FAT_Info[screen][bg_select].Infos.Map=NULL;
+	FAT_Info[screen][bg_select].Infos.Palette=NULL;
+	
 	//Load the binary data first
-	TileBuffer=NULL;
 	//load the tiles
 	sprintf(TempName,"%s_Tiles.bin",name);
-	TileBuffer=FatLoad(TempName);
-	//load the map
-	MapBuffer=NULL;
+	FAT_Info[screen][bg_select].Infos.Tiles = FatLoad(TempName);
+	FAT_Info[screen][bg_select].Infos.TileSize = Size;
+
 	sprintf(TempName,"%s_Map.bin",name);
-	MapBuffer=FatLoad(TempName);
+
+	FAT_Info[screen][bg_select].Infos.Map=FatLoad(TempName);
+	FAT_Info[screen][bg_select].Infos.MapSize=Size;
 	//load the pal
-	PalBuffer=NULL;
 	sprintf(TempName,"%s_Pal.bin",name);
-	PalBuffer=FatLoad(TempName);
-	
-	sprintf(TempName,"%s.c",name);
-	Fat_BgInfo=FAT_LoadBgInfo(TempName);
-	if(Fat_BgInfo.Error){
-		PA_Print(0,"error %d\n",Fat_BgInfo.Error);
-		return 0; //failed in loading info
-	}
+	FAT_Info[screen][bg_select].Infos.Palette = FatLoadPal(TempName);
+	DC_FlushAll();
+	FAT_BgLoad(screen,bg_select,type,width,height,
+	(char*)FAT_Info[screen][bg_select].Infos.Tiles,
+	FAT_Info[screen][bg_select].Infos.TileSize,
+	(char*)FAT_Info[screen][bg_select].Infos.Map,
+	FAT_Info[screen][bg_select].Infos.MapSize,
+	(char*)FAT_Info[screen][bg_select].Infos.Palette);
 
-	FAT_BgLoad(screen,bg_select,Fat_BgInfo.Bgtype,Fat_BgInfo.width,Fat_BgInfo.height,(char*)TileBuffer,Fat_BgInfo.tilesize,(char*)MapBuffer,Fat_BgInfo.mapsize,(char*)PalBuffer);
-	free(TileBuffer);
-	free(MapBuffer);
-	free(PalBuffer);
 	return 1;
-}
-
-void FAT_LoadSprite(u8 ID, char* spritename, char* palname){
-	File = fopen (palname, "rb"); 
-	fread (PaletteCustom, 1, sizeof(PaletteCustom), File);
-	fclose (File);
-	File = fopen (spritename, "rb");
-	fseek (File, 0 , SEEK_END);
-	Size = ftell (File);
-	rewind (File);
-	SpriteCustom[ID] = malloc(Size); 
-	fread (SpriteCustom[ID], 1, Size, File);
-	fclose (File);	
 }

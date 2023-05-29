@@ -71,6 +71,7 @@ u32 PA_BoxTextNoWrap(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const 
 u32 PA_BoxText(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const char *text, u32 limit) {
 	s16 i, j;
 	s16 x, y;
+	s16 letter;
 	x = basex;
 	y = basey;
 	u16 ylimit = maxy;
@@ -110,6 +111,7 @@ u32 PA_BoxText(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const char *
 
 			//PA_OutputText(0, 0, 0, "%d ", temp);
 			while (!((text[i+wordletter] <= 32) || ((text[i+wordletter] == '%') && (text[i+wordletter+1] == 'c')))) { // >= 32, donc si 0, '\n', on ' ' :)
+				letter = text[i+wordletter] - 32;
 				wordx++;
 				wordletter++;
 			}
@@ -173,4 +175,71 @@ char *selectchar(const char *text, int begin, int end) {
 
 	text2[i-begin+1] = '\0';
 	return text2;
+}
+//defilement
+void PA_OutputTextSpecial0(u8 screen, int x1, int y, const char *text) {
+	int i, k, x2 = strlen(text) + x1 + 1;
+
+	for (i = x2; i > x1; i--) {
+		PA_OutputSimpleText(screen, i, y, selectchar(text, 0, x2 - x1 - 1));
+
+		for (k = 0; k < 30; k++)PA_WaitForVBL();
+
+		PA_OutputSimpleText(screen, i + strlen(selectchar(text, 0, x2 - x1 - 1)) - 1, y, " ");
+	}
+}
+//separation
+void PA_OutputTextSpecial1(u8 screen, int x1, int y, const char *text) {
+	int i, k, x2 = strlen(text) + x1 + 1;
+
+	for (i = x2; i > x1; i--) {
+		PA_OutputSimpleText(screen, i + strlen(selectchar(text, 0, i - x1 - 1)), y, " ");
+		PA_OutputSimpleText(screen, i, y, selectchar(text, 0, i - x1 - 1));
+
+		for (k = 0; k < 30; k++)PA_WaitForVBL();
+	}
+}
+//etirement
+void PA_OutputTextSpecial2(u8 screen, int x1, int y, const char *text) {
+	int i, k, x2 = strlen(text) + x1;
+
+	for (i = x2; i > x1; i--) {
+		PA_OutputSimpleText(screen, i, y, selectchar(text, 0, i - x1));
+
+		for (k = 0; k < 30; k++)PA_WaitForVBL();
+	}
+}
+//etirement + suppression de la fin
+void PA_OutputTextSpecial3(u8 screen, int x1, int y, const char *text) {
+	int i, k, x2 = strlen(text) + x1 + 1;
+
+	for (i = x2; i > x1; i--) {
+		PA_OutputSimpleText(screen, x2 + strlen(selectchar(text, 0, i - x1 - 1)) + 1, y, " ");
+		PA_OutputSimpleText(screen, i, y, selectchar(text, 0, i - x1 - 1));
+
+		for (k = 0; k < 30; k++)PA_WaitForVBL();
+	}
+}
+//etirement + separation
+void PA_OutputTextSpecial4(u8 screen, int x1, int y, const char *text) {
+	int i, k, x2 = strlen(text) + x1 + 1;
+
+	for (i = x2; i > x1; i--) {
+		PA_OutputSimpleText(screen, i + strlen(selectchar(text, 0, i - x1)), y, " ");
+		PA_OutputSimpleText(screen, i, y, selectchar(text, 0, i - x1 - 1));
+
+		for (k = 0; k < 30; k++)PA_WaitForVBL();
+	}
+}
+//defilement + suppression
+void PA_OutputTextSpecial5(u8 screen, int x1, int y, const char *text) {
+	int i, k, x2 = strlen(text) + x1 + 1;
+
+	for (i = x2; i > x1; i--) {
+		PA_OutputSimpleText(screen, i, y, selectchar(text, 0, i - x1 - 1));
+
+		for (k = 0; k < 30; k++)PA_WaitForVBL();
+
+		PA_OutputSimpleText(screen, i + strlen(selectchar(text, 0, i - x1 - 1)) - 2, y, "   ");
+	}
 }
