@@ -13,7 +13,7 @@ u32 pa_printx[2];
 u32 pa_printy[2];
 s16 pa_printscroll[2];
 
-s8 PA_font[2] = {};  // 0 pour normal, 1 pour dégradé, -1 pour custom
+s8 PA_font[2] = {};  // 0 pour normal, 1 pour dï¿½gradï¿½, -1 pour custom
 
 u16 PAtext_pal[2] = {0, 0}; // text colors...
 
@@ -58,7 +58,7 @@ void PA_LoadDefaultText(u8 screen, u8 bg_select) {
 u16 PA_OutputSimpleText(u8 screen, u16 x, u16 y, const char *text) {
 	int j, i = 0;
 	u16 textcount = 0; // compte le nombre de lettres...
-	BG_PALETTE[255 + (screen * 512)] = textcol[screen]; // On remet la couleur au cas où on ait chargé du texte par-dessus...
+	BG_PALETTE[255 + (screen * 512)] = textcol[screen]; // On remet la couleur au cas oï¿½ on ait chargï¿½ du texte par-dessus...
 
 	for (j = 0; text[j]; j++) {
 		while (text[j] == '\n') {
@@ -77,14 +77,12 @@ u16 PA_OutputSimpleText(u8 screen, u16 x, u16 y, const char *text) {
 void PA_OutputText(u8 screen, u16 x, u16 y, const char* text, ...) {
 	int j, i, k = 0;
 	u16 textcount = 0; // compte le nombre de lettres...
-	u8 PAtext[32]; // tableau où l'on copie les nombres et tout...
-	u8 PAtextcount = 0; // Quand on a un nombre, il faut savoir sa longueur
+	u8 PAtext[32]; // tableau oï¿½ l'on copie les nombres et tout...
 	u8 *PAextext; // Extra text
 	s32 PAtextnumber;
 	double tempdouble = 0;
-	va_list varg;           /* Variable identifiant le prochain paramètre. */
+	va_list varg;           /* Variable identifiant le prochain paramï¿½tre. */
 	va_start(varg, text);
-	PAtextcount = 0;
 	u8 textcolor = PAtext_pal[screen];
 
 	for (j = 0; text[j]; j++) {
@@ -92,8 +90,8 @@ void PA_OutputText(u8 screen, u16 x, u16 y, const char* text, ...) {
 			if (text[j+1] == 'c') { // change color !
 				PA_SetTextTileCol(screen, text[j+2] - '0');
 				j += 2;
-			} else if (text[j+1] == 's') { // S'il y a %s, c'est une chaine de caractères...
-				PAextext = (u8*)va_arg(varg, const u8 *);  // Pointeur vers la chaine de charactères...
+			} else if (text[j+1] == 's') { // S'il y a %s, c'est une chaine de caractï¿½res...
+				PAextext = (u8*)va_arg(varg, const u8 *);  // Pointeur vers la chaine de charactï¿½res...
 
 				for (i = 0; PAextext[i]; i++) {
 					while (PAextext[i] == '\n') {
@@ -132,14 +130,14 @@ void PA_OutputText(u8 screen, u16 x, u16 y, const char* text, ...) {
 				if (text[j+1] == 'd') {
 					PAtextnumber = va_arg(varg, s32);
 					test = PAtextnumber;
-				} else { // On ne prend que la partie entière pour l'instant, on garde le reste pour plus tard :p
+				} else { // On ne prend que la partie entiï¿½re pour l'instant, on garde le reste pour plus tard :p
 					tempdouble = va_arg(varg, double);
 					test = tempdouble;
 					PAtextnumber = (s32)tempdouble ;
 					tempdouble -= PAtextnumber;
 				}
 
-				s8 neg = 0; // Si negatif, passe à 1...
+				s8 neg = 0; // Si negatif, passe ï¿½ 1...
 
 				if (test < 0) {
 					PAtextnumber = -PAtextnumber;
@@ -147,9 +145,9 @@ void PA_OutputText(u8 screen, u16 x, u16 y, const char* text, ...) {
 					neg = 1;
 				}
 
-				for (i = 0; PAtextnumber || (!PAtextnumber && !i); i++) {  // tant que le nombre ne vaut pas 0 mais que i est positif, on continu à la convertir...
+				for (i = 0; PAtextnumber || (!PAtextnumber && !i); i++) {  // tant que le nombre ne vaut pas 0 mais que i est positif, on continu ï¿½ la convertir...
 					PAtext[i] = '0' + (PAtextnumber % 10);
-					PAtextnumber = PAtextnumber / 10; // Nombre de départ...
+					PAtextnumber = PAtextnumber / 10; // Nombre de dï¿½part...
 				}
 
 				if (neg) {
@@ -164,15 +162,15 @@ void PA_OutputText(u8 screen, u16 x, u16 y, const char* text, ...) {
 
 				j += 1;
 
-				if (text[j] == 'f') { // Il reste donc la virgule à traiter...
+				if (text[j] == 'f') { // Il reste donc la virgule ï¿½ traiter...
 					PA_SetTileLetter(screen, x + textcount, y, '.');
 					++ textcount;
-					i = text[j+1] - 48;  // Nombre de chiffres après la virgule...
+					i = text[j+1] - 48;  // Nombre de chiffres aprï¿½s la virgule...
 					PAtext[1] = 0; // Permet de stopper si c'est vba...
 
 					if (tempdouble < 0) tempdouble = -tempdouble;
 
-					while ((i-- > 0)) { // Pas plus de 6 chiffres après la virgule...
+					while ((i-- > 0)) { // Pas plus de 6 chiffres aprï¿½s la virgule...
 						tempdouble *= 10;
 						//if (
 						PAtextnumber = (s32)tempdouble;
@@ -186,22 +184,22 @@ void PA_OutputText(u8 screen, u16 x, u16 y, const char* text, ...) {
 				}
 			} else if ((text[j+3] == 'd') && (text[j+1] != ' ') && (text[j+2] != ' ')) { // C'est plus loin, donc on a genre %02d...
 				PAtextnumber = va_arg(varg, s32);
-				s8 neg = 0; // Si negatif, passe à 1...
-				u8 amettre = text[j+1]; // Nombre à mettre pour remplir
-				s8 nfois = text[j+2] - '0'; // Nombre de caractères à mettre
+				s8 neg = 0; // Si negatif, passe ï¿½ 1...
+				u8 amettre = text[j+1]; // Nombre ï¿½ mettre pour remplir
+				s8 nfois = text[j+2] - '0'; // Nombre de caractï¿½res ï¿½ mettre
 
 				if (PAtextnumber < 0) {
 					PAtextnumber = -PAtextnumber;
 					neg = 1;
 				}
 
-				for (i = 0; PAtextnumber || (!PAtextnumber && !i); i++) {  // tant que le nombre ne vaut pas 0 mais que i est positif, on continu à la convertir...
+				for (i = 0; PAtextnumber || (!PAtextnumber && !i); i++) {  // tant que le nombre ne vaut pas 0 mais que i est positif, on continu ï¿½ la convertir...
 					PAtext[i] = 48 + (PAtextnumber % 10);
-					PAtextnumber = PAtextnumber / 10; // Nombre de départ...
-					nfois--; // Un nombre de moins à mettre...
+					PAtextnumber = PAtextnumber / 10; // Nombre de dï¿½part...
+					nfois--; // Un nombre de moins ï¿½ mettre...
 				}
 
-				while (nfois > 0) { // On complète de 0 est tout...
+				while (nfois > 0) { // On complï¿½te de 0 est tout...
 					PA_SetTileLetter(screen, x + textcount, y, amettre);
 					++textcount;
 					--nfois;

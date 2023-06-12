@@ -128,25 +128,33 @@ void PA_Draw8bitLineEx(u8 screen, s16 basex, s16 basey, s16 endx, s16 endy, u8 c
 		i = low;
 		x1 = basex + i; x2 = endx + i; y1 = basey + j; y2 = endy + j;
 
-		while (x1 < 0) x1++;	while (x1 > 255) x1--;
+		while (x1 < 0) x1++;	
+		while (x1 > 255) x1--;
 
-		while (x2 < 0) x2++;	while (x2 > 255) x2--;
+		while (x2 < 0) x2++;	
+		while (x2 > 255) x2--;
 
-		while (y1 < 0) y1++;	while (y1 > 191) y1--;
+		while (y1 < 0) y1++;	
+		while (y1 > 191) y1--;
 
-		while (y2 < 0) y2++;	while (y2 > 191) y2--;
+		while (y2 < 0) y2++;	
+		while (y2 > 191) y2--;
 
 		PA_Draw8bitLine(screen, x1, y1, x2, y2, color);
 		i = high - 1;
 		x1 = basex + i; x2 = endx + i; y1 = basey + j; y2 = endy + j;
 
-		while (x1 < 0) x1++;	while (x1 > 255) x1--;
+		while (x1 < 0) x1++;	
+		while (x1 > 255) x1--;
 
-		while (x2 < 0) x2++;	while (x2 > 255) x2--;
+		while (x2 < 0) x2++;	
+		while (x2 > 255) x2--;
 
-		while (y1 < 0) y1++;	while (y1 > 191) y1--;
+		while (y1 < 0) y1++;	
+		while (y1 > 191) y1--;
 
-		while (y2 < 0) y2++;	while (y2 > 191) y2--;
+		while (y2 < 0) y2++;	
+		while (y2 > 191) y2--;
 
 		PA_Draw8bitLine(screen, x1, y1, x2, y2, color);
 	}
