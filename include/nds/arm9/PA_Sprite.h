@@ -366,7 +366,7 @@ static inline void PA_Create16bitSpriteFromGfx(u8 screen, u8 obj_number, u16 gfx
 	PA_obj[screen][obj_number].atr2 = gfx + (15 << 12);
 	PA_obj[screen][obj_number].atr0 = (y&PA_OBJ_Y) + (3 << 10) + (obj_shape << 14);
 	PA_obj[screen][obj_number].atr1 = (x & PA_OBJ_X) + (obj_size << 14);
-	obj_per_gfx[screen][PA_obj[screen][obj_number].atr2]++;
+	obj_per_gfx[screen][PA_obj[screen][obj_number].atr2] ++;
 	pa_obj_created[screen][obj_number]=1;
 }
 
