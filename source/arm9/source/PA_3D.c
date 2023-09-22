@@ -18,7 +18,8 @@ void PADefault3DInit(){
 
 void PA_Init3D(){
 	videoSetMode(MODE_0_3D); // Set 3D on...
-	REG_DISPCNT |= DISPLAY_BG_EXT_PALETTE; // BG extended palettes
+	
+	bgExtPaletteEnable();
 
 	vramSetBankA(VRAM_A_TEXTURE); // Say good-bye to sprites ^^
 	vramSetBankF(VRAM_F_TEX_PALETTE); // Palettes for the textures...
@@ -30,7 +31,8 @@ void PA_Init3D(){
 
 void PA_Init3D2Banks(){
 	videoSetMode(MODE_0_3D); // Set 3D on...
-	REG_DISPCNT |= DISPLAY_BG_EXT_PALETTE; // BG extended palettes
+	
+	bgExtPaletteEnable();
 
 	vramSetBankA(VRAM_A_TEXTURE); // Say good-bye to sprites ^^
 	vramSetBankB(VRAM_B_TEXTURE); // Say good-bye to sprites ^^	

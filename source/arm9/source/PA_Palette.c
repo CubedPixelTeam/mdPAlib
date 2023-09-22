@@ -37,8 +37,6 @@ void PA_InitBgExtPal(void) {
 	
 	bgExtPaletteEnable();
 	bgExtPaletteEnableSub();
-	//REG_DISPCNT |= (DISPLAY_BG_EXT_PALETTE);
-	//REG_DISPCNT_SUB |= (DISPLAY_BG_EXT_PALETTE);	
 	u8 i;
 
 	for (i = 0; i < 4; i++) { // On copie la palette partout

@@ -40,7 +40,7 @@ u32 PA_BoxTextNoWrap(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const 
 	u16 j;
 	u16 textcount = 0; // compte le nombre de lettres...
 	u8 loop = 1; // On continue...
-	BG_PALETTE[255 + (screen * 512)] = textcol[screen]; // On remet la couleur au cas où on ait chargé du texte par-dessus...
+	BG_PALETTE[255 + (screen * 512)] = textcol[screen]; // On remet la couleur au cas oï¿½ on ait chargï¿½ du texte par-dessus...
 
 	for (j = 0; text[j] && loop && (j < limit); j++) {
 		if (text[j] == '\n') {
@@ -71,7 +71,6 @@ u32 PA_BoxTextNoWrap(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const 
 u32 PA_BoxText(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const char *text, u32 limit) {
 	s16 i, j;
 	s16 x, y;
-	s16 letter;
 	x = basex;
 	y = basey;
 	u16 ylimit = maxy;
@@ -111,14 +110,13 @@ u32 PA_BoxText(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const char *
 
 			//PA_OutputText(0, 0, 0, "%d ", temp);
 			while (!((text[i+wordletter] <= 32) || ((text[i+wordletter] == '%') && (text[i+wordletter+1] == 'c')))) { // >= 32, donc si 0, '\n', on ' ' :)
-				letter = text[i+wordletter] - 32;
 				wordx++;
 				wordletter++;
 			}
 
 			//if (text[i+wordletter] == 0) loop = 0;
 
-			if (x + wordx > maxx) {   // On dépasse en X...
+			if (x + wordx > maxx) {   // On dï¿½passe en X...
 				while (x < maxx) { // On efface tout ce qui suit
 					PA_SetTileLetter(screen, x, y, ' ');
 					x++;
@@ -128,7 +126,7 @@ u32 PA_BoxText(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const char *
 				y ++;
 
 				if (text[i] != ' ') { // On vire s'il y a un espace
-					if (y <= ylimit) { // Si on n'a pas dépassé...
+					if (y <= ylimit) { // Si on n'a pas dï¿½passï¿½...
 						for (j = i; (j < (i + wordletter)) && (j < limit) && (text[j] != 0); j++) {
 							PA_SetTileLetter(screen, x, y, text[j]);
 							/*goon = goon && text[j];
@@ -141,12 +139,12 @@ u32 PA_BoxText(u8 screen, u16 basex, u16 basey, u16 maxx, u16 maxy, const char *
 						i--;
 						//i+=wordletter-1;
 					} // Sinon ca va s'arreter
-					else i--; // On n'a pas affiché la derniere lettre...
+					else i--; // On n'a pas affichï¿½ la derniere lettre...
 				}
-			} else { // Si pas de passage à la ligne auto
+			} else { // Si pas de passage ï¿½ la ligne auto
 				s32 jmax = (i + wordletter);
 
-				if (text[(i + wordletter-1)] < 32) jmax--; // On ne dessinera pas ce caractère
+				if (text[(i + wordletter-1)] < 32) jmax--; // On ne dessinera pas ce caractï¿½re
 
 				for (j = i; (j < jmax) && (j < limit) && (text[j] != 0); j++) {
 					PA_SetTileLetter(screen, x, y, text[j]);

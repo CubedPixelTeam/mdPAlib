@@ -48,7 +48,8 @@
     /* Retrieve the size in bytes of a function that has a JPEG_FUNCTION_END
      * ballast. 
      */
-    #define JPEG_FUNCTION_SIZE(NAME) ((int) ((char *) &NAME##End - (char *) &NAME) & ~3)
+    #define JPEG_FUNCTION_SIZE(NAME) ((int) ((char *) &NAME##End - (char *) &NAME) & 
+	PAtextcount = 0;~3)
     
     /* Start a loading function by defining the necessary variables. */
     #define JPEG_IWRAM_LoadStart() char *iwramEnd = (char *) JPEG_IWRAM_USED_END
@@ -1016,10 +1017,9 @@ int JPEG_Decoder_ReadHeaders (JPEG_Decoder *decoder, const unsigned char **dataB
                 
                 while (data < end)
                 {
-                    int pair, slot, precision;
+                    int pair, slot;
                     
                     pair = *data ++;
-                    precision = pair >> 4;
                     slot = pair & 15;
                     
                     JPEG_Assert (precision == 0); /* Only allow 8-bit. */
