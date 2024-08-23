@@ -34,7 +34,8 @@ char* FatLoad(const char *filename)
 	}
 	return NULL;
 }
-
+/// This Function is commented out, this function is not tested well but it seems to work, however it is quite useless.
+/*
 u8 GetPixelWBL(const char* bgmap,const char*bgtiles,u8 screen, u8 bg_number, s32 x, s32 y, int scrollx, int scrolly,int width, int height) {
 	// Adjust X/Y values
 	x += scrollx; x &= (width- 1);
@@ -62,7 +63,7 @@ u8 GetPixelWBL(const char* bgmap,const char*bgtiles,u8 screen, u8 bg_number, s32
 
 	u8 *Tiles = (u8*)bgtiles;
 	return Tiles[tilepix+x+(y<<3)];
-}
+}*/
 char* FatLoadPal(const char *filename)
 {
 	FILE* File = fopen (filename, "rb"); 

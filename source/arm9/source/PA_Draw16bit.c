@@ -20,8 +20,8 @@ void PA_Init16bitBg(u8 screen, u8 bg_priority) {
 	dmaFillWords(0, (void*)PA_DrawBg[screen], 256*192*2);
 	//this is just used so we can write red color bits to one frame and green to the
 	//other
-	charsetstart[screen] = 2; // On se réserve la moitié de la mémoire...
-	charblocks[screen][16] = 1; // Block la mémoire
+	charsetstart[screen] = 2; // On se rï¿½serve la moitiï¿½ de la mï¿½moire...
+	charblocks[screen][16] = 1; // Block la mï¿½moire
 	_REG16(REG_BGCNT(screen, 3)) = bg_priority | BG_BMP16_256x256 | BG_BMP_BASE(2);
 	PA_SetDrawSize(screen, 1);
 }
@@ -34,10 +34,13 @@ void PA_Init16bitDblBuffer(u8 screen, u8 bg_priority) {
 	PA_DrawBg[screen] = (u16*)(0x06000000 + (0x200000 *  screen) + 192 * 512);
 	PA_DrawBg32[screen] = (u32*)PA_DrawBg[screen];
 	pa16bitbuffer[screen] = 0; // First buffer...
-	charsetstart[screen] = 0; // On se réserve la moitié de la mémoire...
+	charsetstart[screen] = 0; // On se rï¿½serve la moitiï¿½ de la mï¿½moire...
 	_REG16(REG_BGCNT(screen, 3)) = bg_priority | BG_BMP16_256x256 | BG_BMP_BASE(0);
 	PA_SetDrawSize(screen, 1);
-	vramSetMainBanks(VRAM_A_MAIN_BG_0x06000000, VRAM_B_MAIN_BG_0x06020000, VRAM_C_SUB_BG, VRAM_D_SUB_SPRITE);
+	vramSetBankA(VRAM_A_MAIN_BG_0x06000000);
+	vramSetBankB(VRAM_B_MAIN_BG_0x06020000);
+	vramSetBankC(VRAM_C_SUB_BG);
+	vramSetBankD(VRAM_D_SUB_SPRITE);
 }
 
 void PA_16bitSwapBuffer(u8 screen) {

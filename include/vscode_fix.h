@@ -1,4 +1,3 @@
-
 /*
 Used to get VS Code Intellisense working correctly for header definitions
 protected by compiler-specific feature flags.

@@ -62,17 +62,17 @@ void PA_DoAlign(u16 start, s16 x, s16 maxx, u8 justify) {
 	s16 i;
 	s16 width = (maxx + 1) - x;
 
-	if (textinfo.align == ALIGN_RIGHT) { // Cas simple, on rajoute la différence de largeur à toutes les lettres...
+	if (textinfo.align == ALIGN_RIGHT) { // Cas simple, on rajoute la diffï¿½rence de largeur ï¿½ toutes les lettres...
 		width++;
 
 		for (i = start; i < PA_LetterPos.NLetters; i++) PA_LetterPos.Letter[i].X += width;
-	} else if (textinfo.align == ALIGN_CENTER) { // Cas simple, on rajoute la moitié de la largeur à toutes les lettres...
+	} else if (textinfo.align == ALIGN_CENTER) { // Cas simple, on rajoute la moitiï¿½ de la largeur ï¿½ toutes les lettres...
 		width = (width + 1) >> 1;
 
 		for (i = start; i < PA_LetterPos.NLetters; i++) PA_LetterPos.Letter[i].X += width;
 	} else if (justify && (textinfo.align == ALIGN_JUSTIFY)) { // Cas relou ^^
 		//u8 nletters = PA_LetterPos.NLetters-start; // Nombre de lettres
-		u8 justify = 0; // Décallage à faire au début...
+		u8 justify = 0; // Dï¿½callage ï¿½ faire au dï¿½but...
 		u8 spaces = 0;
 		u8 change = 0;
 		u8 quickadd = 0;
@@ -93,7 +93,7 @@ void PA_DoAlign(u16 start, s16 x, s16 maxx, u8 justify) {
 			if ((PA_LetterPos.Letter[i].Letter == ' ') && width) {
 				change = (width + (spaces >> 1)) / spaces;
 				justify += change;
-				width -= change; // Moins à corriger par la suite...
+				width -= change; // Moins ï¿½ corriger par la suite...
 				spaces--;
 			}
 		}
@@ -102,7 +102,7 @@ void PA_DoAlign(u16 start, s16 x, s16 maxx, u8 justify) {
 
 void PA_DoLetterPos(s16 basex, s16 basey, s16 maxx, s16 maxy, const char* text, u16 color, u8 size, s32 limit) {
 	s16 x = basex; s16 y = basey;
-	s16 width, letterstart;
+	s16 letterstart;
 	u8 lx, letter = ' ';
 	s16 i;
 	PA_LetterPos.NLetters = 0;
@@ -114,13 +114,12 @@ void PA_DoLetterPos(s16 basex, s16 basey, s16 maxx, s16 maxy, const char* text, 
 		letter = text[i];
 		lx = pa_bittextdefaultsize[size][letter] + textinfo.letterspacing;
 
-		if ((letter == '\n') || ((x + lx > maxx) && (letter != ' '))) { // retour ligne, ou on dépasse...
-			width = x - basex; // LARGEUR !
+		if ((letter == '\n') || ((x + lx > maxx) && (letter != ' '))) { // retour ligne, ou on dï¿½passe...
 
-			if (letter == '\n')PA_AddLetterPos(letter, x, y, size, color); // Retour ligne à mettre dans le tableau
-			else if (letter == ' ') PA_AddLetterPos(letter, x, y, size, color); // Si espace, on met à la suite
+			if (letter == '\n')PA_AddLetterPos(letter, x, y, size, color); // Retour ligne ï¿½ mettre dans le tableau
+			else if (letter == ' ') PA_AddLetterPos(letter, x, y, size, color); // Si espace, on met ï¿½ la suite
 			else {
-				// Sinon, on revient en arrière pour pas couper un mot !
+				// Sinon, on revient en arriï¿½re pour pas couper un mot !
 				while (text[i-1] != ' ') {
 					i--; x -= pa_bittextdefaultsize[size][(u8)text[i]] + textinfo.letterspacing; PA_LetterPos.NLetters--;
 				} // Retirer les lettres et la largeur
@@ -134,14 +133,14 @@ void PA_DoLetterPos(s16 basex, s16 basey, s16 maxx, s16 maxy, const char* text, 
 				break; // EXIT !
 			}
 
-			// Calculer différence de largeur...
+			// Calculer diffï¿½rence de largeur...
 			if (text[i-1] == ' ') x -= pa_bittextdefaultsize[size][(u8)(' ')]; // Retirer la largeur de l'espace
 
-			// Retour ligne ! Voir si besoin d'aligne le texte d'un côté ou de l'autre, centrer, etc...
+			// Retour ligne ! Voir si besoin d'aligne le texte d'un cï¿½tï¿½ ou de l'autre, centrer, etc...
 			PA_DoAlign(letterstart, x, maxx, (letter != '\n')); // Autorise le justify que si pas '\'n
 			x = basex;
 			y += pa_bittextpoliceheight[size] + textinfo.linespacing;
-			letterstart = PA_LetterPos.NLetters; // Première lettre de cette ligne !
+			letterstart = PA_LetterPos.NLetters; // Premiï¿½re lettre de cette ligne !
 
 			if (letter > 32) {
 				PA_AddLetterPos(letter, x, y, size, color);
